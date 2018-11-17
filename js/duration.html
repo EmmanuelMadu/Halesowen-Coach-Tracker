@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Duration Test</title>
+</head>
+<body>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+        var source, destination;
+
+        function calculate() {
+            source = new google.maps.LatLng(52.522308, -2.051520);
+            destination = new google.maps.LatLng(52.456356, -2.053135);
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix({
+                origins: [source],
+                destinations: [destination],
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+                if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                    var distance = response.rows[0].elements[0].distance.text;
+                    var duration = response.rows[0].elements[0].duration.text;
+                    var dis = document.getElementById("dis");
+                    dis.innerHTML = "";
+                    dis.innerHTML += "Distance: " + distance + " | | ";
+                    dis.innerHTML += "Duration:" + duration;
+                } else {
+                    alert("Unable to find the distance.");
+                }
+            });
+        }
+    </script>
+    <input type="button" value="Calculate" onclick="calculate()" /> <hr /><div id="dis">
+</body>
+</html>
